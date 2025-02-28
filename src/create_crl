@@ -1,0 +1,23 @@
+#! /bin/bash
+
+cd `dirname $0`
+if [ -f $ACNAME/env.sh ] ; then
+  . $ACNAME/env.sh
+else
+  exit 12
+fi
+
+# update database
+echo -e "${COLORED}Update CAdatabase ${CADIR}database.dat for $ACNAME$NORMAL"
+openssl ca -config ${CADIR}ca.conf -updatedb
+
+# create crl
+echo -e "${COLORED}Create CRL ${CADIR}ca.crl for $ACNAME$NORMAL"
+openssl ca -config ${CADIR}ca.conf  -gencrl -out ${CADIR}ca.crl
+##-crldays 15
+
+# Aff crl
+openssl crl -in ${CADIR}ca.crl -text -noout
+
+
+

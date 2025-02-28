@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #FF6F61; /* Corail */
+  --color-bg-normal: #FFFAF0; /* Blanc Fleur d'Amande */
+  --color-bg-plus: #FFEBE8; /* Rose Claire */
+  --color-border-table: #FFC107; /* Jaune Miel */
+  --color-border-cells: #FFB74D; /* Jaune Clair */
+  --color-text: #6C757D; /* Gris Foncé */
+  --color-text-hover: #D32F2F; /* Rouge Sombre au survol */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+}

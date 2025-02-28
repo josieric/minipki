@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #2196F3; /* Bleu Vif */
+  --color-bg-normal: #E3F2FD; /* Bleu Très Clair */
+  --color-bg-plus: #BBDEFB; /* Bleu Clair */
+  --color-border-table: #1976D2; /* Bleu Moyen */
+  --color-border-cells: #64B5F6; /* Bleu Doux */
+  --color-text: #0D47A1; /* Bleu Marine */
+  --color-text-hover: #1E88E5; /* Bleu au survol */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>CA: {{ caname }}</h3>
+    <div style="display: flex;justify-content: center;">
+            <div>
+               <form id="createCA" method="POST" action="createCA">
+                   <input type="submit" value="Create CA">
+               </form>
+            </div>
+            <div>
+               <form id="form0" method="POST" action="setCA">
+                   <input type="submit" value="set CA">
+               </form>
+            </div>
+	    <div>
+	       <form id="form1" method="POST" action="create">
+		   <input type="hidden" name="ctype" value="client">
+		   <input type="submit" value="New client">
+	       </form>
+	    </div>
+	    <div>
+               <form id="form2" method="POST" action="create">
+                   <input type="hidden" name="ctype" value="server">
+                   <input type="submit" value="New server">
+               </form>
+	    </div>
+            <div>
+               <form id="form3" method="POST" action="newcrl">
+                   <input type="submit" value="Regen CRL">
+               </form>
+            </div>
+	    <div>
+	       <form id="form4" method="POST" action="download">
+		   <input type="hidden" name="file" value="ca.crl">
+		   <input type="hidden" name="cname" value="{{caname}}">
+		   <input type="submit" value="Get CRL">
+	       </form>
+	    </div>
+            <div>
+               <form id="form4" method="POST" action="crl">
+                   <input type="submit" value="CRL infos">
+               </form>
+            </div>
+    </div>
+    <table>
+	    <tr><th>List Certificates</th></tr>
+        {% for f,v in tabfile %}
+	<tr> <td> <span title="{{v}}"> {{v[5]}} </span>
+		  <span title="{{v[0]}} {{v[1]}}">
+				<a href="info?file={{ f | replace(caname+'/','') }}">
+					{{v[2]}} {{ f | replace(caname+'/','') }}
+				</a>
+		  </span>
+	</td> </tr>
+        {% endfor %}
+	{% if tabfile|length == 0 %}
+	   <tr><td>No file</td></tr>
+	{% elif tabfile|length == 1 %}
+	   <tr><td>1 file</td></tr>
+	{% else %}
+	   <tr><td>{{ tabfile|length }} file(s)</td></tr>
+	{% endif %}
+    </table>
+
+{% endblock %}

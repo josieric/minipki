@@ -1,0 +1,8 @@
+      2 color-bg-normal
+      5 color-bg-plus
+      1 color-border-cells
+      8 color-border-table
+      4 color-text
+      5 color-text-ontitle
+      2 color-text-over
+      7 color-bg-title

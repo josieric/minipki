@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #A77BCA; /* Mauve pastel pour les titres */
+  --color-bg-normal: #3E2A4D; /* Fond nuit très foncé avec une nuance de violet */
+  --color-bg-plus: #D1C4E9; /* Mauve pastel clair pour les éléments supplémentaires */
+  --color-border-table: #B39DCC; /* Bordure des tables en mauve pastel foncé */
+  --color-border-cells: #E1B7E0; /* Bordure des cellules en mauve pastel clair */
+  --color-text: #4B4B4B; /* Ardoise foncé */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur les titres */
+  --color-text-hover: #FF6F20; /* Couleur d'accent orange pour le survol */
+}

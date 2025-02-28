@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>CA: {{ caname }}</h3>
+    <h4>Create {{ ctype }}</h4>
+    <div style="display: flex;justify-content: center;">
+	    <div>
+               <form id="menu" method="POST" action=".">
+                   <input type="submit" value="Home">
+               </form>
+	    </div>
+    </div>
+    <script language="javascript">
+	 function gogo() {
+	   var val = document.getElementById('name').value;
+	   if (val !== null && val !== '') {
+	     form = document.getElementById('fcreate');
+	     form.action = "create/{{ctype}}/"+val;
+	     form.submit();
+	   }
+	   else {
+	     alert("Name is empty !!!");
+	   }
+         }
+    </script>
+    <form id="fcreate" method="POST" action="javascript:gogo()" >
+    <table>
+	    <tr><th colspan="2">Create {{ctype}}</th></tr>
+	    <tr><th>Name</th><td><input name="name" id="name"></td></tr>
+	    <tr><td colspan="2" align="center"><input type="button" value="Ok" onclick="javascript:gogo()"></td></tr>
+    </table>
+    </form>
+
+{% endblock %}

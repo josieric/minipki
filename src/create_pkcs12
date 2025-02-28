@@ -1,0 +1,41 @@
+#! /bin/bash
+
+cd `dirname $0`
+if [ -f $ACNAME/env.sh ] ; then
+  . $ACNAME/env.sh
+else
+  exit 12
+fi
+
+NAME=$1
+if [ -z "$NAME" ] ; then
+  echo -e "${RED}First parameter must be a client or server name !!$NORMAL"
+  exit 12
+fi
+
+MIP=""
+if [ ! -z "$2" ] ; then
+  MIP="-passout pass:$2"
+fi
+
+MIDIR=${CLIDIR}$NAME/
+fname=client
+if [ ! -d $MIDIR ] ; then
+  MIDIR=${SERVERDIR}$NAME/
+  fname=server
+fi
+if [ ! -d $MIDIR ] ; then
+  echo -e "${RED}$NAME is not found in client and server !!$NORMAL"
+  exit 12
+fi
+
+if [ -z "$MIP" ] ; then
+  echo -e "$COLORED\nVerify the certificate (optional)$NORMAL"
+  openssl verify -CAfile ${CADIR}ca.crt ${MIDIR}$fname.crt
+
+  echo -e "$COLORED\nGenerate pkcs12 for import in browser or any ca-cert/trust-cert\nEnter password for pkcs12 file:$NORMAL"
+  openssl pkcs12 -export  -inkey ${MIDIR}$fname.key -in ${MIDIR}$fname.crt -certfile ${CADIR}ca.crt -out ${MIDIR}$fname.pfx 
+else
+  openssl pkcs12 -export  -inkey ${MIDIR}$fname.key -in ${MIDIR}$fname.crt -certfile ${CADIR}ca.crt -out - $MIP
+fi
+

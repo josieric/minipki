@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Introduction</h1>
+      <div style="display: flex;justify-content: center;">
+            <div>
+               <form id="menu" method="POST" action=".">
+                   <input type="submit" value="Home">
+               </form>
+            </div>
+      </div>
+    <table>
+	    <tr>
+
+	    <td width="50%"><h6>PKI: Private Key Infrastrusture</h6></td><td width="50%"><h6>CA: Certificate Authority</h6></td></tr>
+	    <tr>
+	    <td align="left" valign="top">
+	    Public Key Infrastructure (PKI), ou <b>Infrastructure à clés publiques</b> est un ensemble de procédures et de composants logiciel et matériel conçus pour gérer de manière sécurisée le cycle de vie des certificats numériques.<br>
+	    Une infrastructure de gestion de clés permet de lier des clés publiques à des identités (comme des noms d'utilisateurs ou d'organisations Cf AE Autorité d'enregistrement).<br>
+	    Une infrastructure de gestion de clés fournit des garanties permettant de faire a priori confiance à une clé publique obtenue par son biais.<br>
+	    Le modèle le plus répendu est basé sur les <b>Autorités de Certification</b> (AC ou CA) publiques ou privées.<br>
+	    D'autres modèles d'organisation peuvent exister:<br>
+	      <ul>
+		      <li>Toile de confiance: PGP GnuPG</li>
+		      <li>BlockChain</li>
+		      <li>... ...</li>
+	      </ul>
+	    </td>
+            <td align="left" valign="top">
+		Une autorité de certification (AC) est un tiers de confiance qui agit pour la <b>sécurisation des communications et des transactions</b>.<br>
+		Les AC sont également appelées <b>autorités de confiance</b>.<br>
+		Elles émettent des certificats numériques basés sur une infrastructure à clés publiques (PKI).<br>
+		Un certificat est une clé publique "signé" par une autorité.<br>
+		Les signatures sont visibles dans les certificats, elle permettent à tous de reconnaitre l'authorité émetrice et de lui faire <b>confiance ou pas</b>.<br>
+		Ces certificats et clés associées permettent le chiffrement "asymétrique" (utilisation de clés différentes pour chiffrer et déchiffrer).<br><br>
+		Dans la pratique, les 'autorités racine' émettent des certificats d'autorités intermédiaires formant ainsi des arbres d'autorité de confiance.<br>
+		Selon les volontés et paramètres mis en oeuvre, la confiance peut-être accordée à la racine ou à l'ensemble de la 'chaine de confiance'.
+            </td> 
+	    </tr>
+	    <td width="50%"><h6>Private Key</h6></td><td width="50%"><h6>Public Key</h6></td></tr>
+	    <tr>
+            <td align="left" valign="top">
+	      <ul>
+		<li>La clé privée est <b>gardée secrète</b>.</li>
+		<li>Elle est utilisée pour :
+			<ul>
+				<li>Déchiffrer des messages chiffrés avec la partie publique de la clé.</li>
+				<li>Signer des messages (ou du code selon les extensions utilisées lors de la signature !).</li>
+				<li>S'authentifier à un service (ou démarrer un service. Si les deux alors "SSL-Two-Way").</li>
+				<li>...</li>
+			</ul>
+		</li>
+	      </ul>
+            </td>
+            <td align="left" valign="top">
+	      <ul>
+		<li>La clé publique est <b>partagée librement</b> à qui souhaite envoyer un message chiffré au propriétaire de la clé privée.</li>
+		<li>Elle est utilisée pour :
+                        <ul>
+                                <li>Chiffrer des messages pour le propriétaire de la clé.</li>
+                                <li>Vérifier les signatures des messages du propriétaire.</li>
+				<li>Reconnaitre un tiers de manière sécurisé (humain ou service).<br>
+					<i>Cf ~/.ssh/authorized_keys dans le cas SSH de "base"</i></li>
+				<li>...</li>
+                        </ul>
+		</li>
+	      </ul>
+            </td> 
+	    </tr>
+	    <tr> <td colspan="2"><h6>SSH Keys VS x509 Certificate</h6></td></tr>
+	    <tr>
+                <td colspan="2" align="left" valign="top">
+		   <div>
+			La différence est principalement dans la partie publique de ces clés.<br>
+			Avec les certificats 'x509', il existe plusieurs informations qui n'existent pas avec une 'simple' clé SSH. Ces informations sont prises en compte (ou pas) par les 'correspondants' humains ou logiciels.<br>
+			<ol>
+				<li>Date de fin de validité</li>
+				<li>Confiance dans l'autorité signataire</li>
+				<li>Common Name (CN) du certificat correspond à celui utilisé par le 'correspondant'</li>
+				<li>La clé n'a pas été révoquée. Cf CRL (Certificate Revoke List) ou OCSP (Online Certificate Status Protocol)</li>
+			</ol>
+		   </div>
+		   <div>
+			<i>Dans le cas SSH aucune de ces informations n'existe.</i>
+                   </div>
+		</td>
+            </tr>
+	    <tr> <td><h6>TrustStore</h6></td><td><h6>KeyStore</h6></td></tr>
+            <tr>
+                <td align="left" valign="top">
+		   <div>
+		   <ul>
+			<li><b>Magasin de confiance</b>:<br>
+			Dans la pratique, il est donc nécessaire "d'avoir" les certificats "racine" ou chaine de certificats de confiance, afin de pouvoir valider les échanges et communications sécurisés avec les tiers ayant des certificats émis par ces autorités.<br>
+			Pour cela la notion de "magasin" ou "porte-feuille" ou "dossier" de certificats de confiance est utilisée dans beaucoup de logiciels, environnements ou languages.<br>
+			Tous les OS (Operating System) propose un "store" sur lequel l'OS et d'autres logiciels peuvent s'appuyer.<br>
+			Les navigateurs (browser) internet possedent leurs propres "magasin" ou peuvent aussi se baser sur le système d'exploitation (selon les parametres utilisés).<br>
+			Des languages comme Java ou Python, embarquent aussi leurs "magasins de confiance" distinct des autres couches logiciels.<br>
+			<i>Dans le cas SSH (openSSH config de base), <b>~/.ssh/known_hosts</b> peut être considéré comme le TrustStore</i>
+			</li>
+                   </ul>
+                   </div>
+		</td><td align="left" valign="top">
+                   <div>
+                   <ul>
+			<li><b>Magasin</b> de clé (ou <b>d'identité</b>):<br>
+			Ce magasin ou dossier ne doit pas être publique et est utilisé pour stocker les clés privées relié à l'identité de l'utilisateur ou du service.<br>
+			Il y a souvent beaucoup moins de confusion que dans le cas du "TrustStore",<br>
+			car ce magasin contient QUE des clés privées, donc forcement dépendant du choix de l'utilisateur ou du service.<br>
+			<i>Dans le cas SSH (openSSH config de base), <b>~/.ssh/id_rsa</b> peut être considéré comme le KeyStore</i>
+			</li>
+		   </ul>
+		   </div>
+		</td>
+            </tr>
+            <tr>
+		<td colspan="2" align="left" valign="top">
+		   <div>
+	    		Il existe un certain nombre de TrustStore, KeyStore, Wallet, cacert et autres façons géniales et originales de stocker les certificats de confiance et clés d'identité.
+		   <ul>
+                        <li><b>Sous Windows</b>, la gestion des magasins de confiance et d'identités repose sur le 'logiciel enfichable' certmgr.msc (IE execute: certmgr.msc)</li>
+                        <li><b>Sous Linux/Unix</b>, selon les versions les commandes sont variées. Mais les 'stores' sont plus facilement visualisable dans des dossiers systèmes.
+                                <ul>
+                                        <li>/etc/ssl/certs</li>
+                                        <li>/etc/ssl/private</li>
+                                        <li>/etc/ca-certificates</li>
+                                        <li>... ...</li>
+                                <ul>
+                        </li>
+                   </ul>
+		   </div>
+		   <div>
+			Evidemment les <b>clés privées</b> sont stockées dans tous les cas dans un <b>espace privé</b> (doivent être !!)<br>
+			Les composants logiciels (browser,dataserver,httpserver,outils divers de communication ...) et matériels (carte, clé USB, lecteur d'identité, ...) utilisent en général des espaces dédiés spécialisés et/ou sécurisés.
+		   </div>
+                </td>
+            </tr>
+
+    </table>
+    <a href="static/README.txt">README de la "partie bash"</a>
+{% endblock %}

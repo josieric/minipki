@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Mini PKI - manage certificates</title>
+    <link id="csscolor" href="static/color/{{color}}.css" type="text/css" rel="STYLESHEET">
+    <link id="css" href="static/style.css" type="text/css" rel="STYLESHEET">
+  </head>
+  <body>
+      <div style="display: inline-block;display: flex;justify-content: flex-end;">
+	<div style="display: inline-block; width: 97%;text-align: center">
+        {% for c in colors %}
+	  <a href="?color={{c[0]}}"><button>{{c[0]}}</button></a>&nbsp;
+        {% endfor %}
+	</div>
+	<div style="display: inline-block;">
+	  {% if colors|length == 0 %}
+             <a href="?color={{color}}" title="Change color" style="text-decoration: none;">&#129518;</a>
+	  {% else %}
+             <a href="?" title="Close color choice" style="text-decoration: none;">&#129518;</a>
+	  {% endif %}
+	  &nbsp;<a href="intro" title="Intro/Help" style="text-decoration: none;">&#10068;</a>
+	</div>
+     </div>
+    <hr>
+    <div>
+      {% block content %}
+      {% endblock %}
+    </div>
+    {% include 'footer.html' %}
+  </body>
+</html>
+

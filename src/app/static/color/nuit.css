@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #BB86FC; /* Violet clair pour les titres */
+  --color-bg-normal: #121212; /* Fond noir profond pour le fond normal */
+  --color-bg-plus: #1E1E1E; /* Fond gris très foncé pour les sections supplémentaires */
+  --color-border-table: #292929; /* Bordure gris foncé pour les tables */
+  --color-border-cells: #444444; /* Bordure gris moyen pour les cellules */
+  --color-text: #E0E0E0; /* Gris clair pour le texte principal */
+  --color-text-hover: #8A2BE2; /* Violet */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre pour un bon contraste */
+}

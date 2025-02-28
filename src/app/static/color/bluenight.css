@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #003366; /* Bleu nuit profond pour les titres */
+  --color-bg-normal: #001F3F; /* Bleu nuit très foncé pour le fond normal */
+  --color-bg-plus: #00509E; /* Bleu moyen pour les éléments supplémentaires */
+  --color-border-table: #004080; /* Bordure des tables en bleu foncé */
+  --color-border-cells: #007ACC; /* Bordure des cellules en bleu clair */
+  --color-text: #B0C4DE; /* Texte clair pour une bonne lisibilité */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur les titres */
+  --color-text-hover: #FF6F20; /* Couleur d'accent orange pour le survol */
+}

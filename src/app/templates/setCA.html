@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>Certificate Authorithy name</h3>
+    {%  if caname is not none %}
+    <div>Authorithy name in your cookie is <b>{{caname}}</b></div>
+      <div style="display: flex;justify-content: center;">
+            <div>  
+               <form id="createCA" method="POST" action="createCA">
+                   <input type="submit" value="Create CA">
+               </form>
+            </div>
+            <div>
+               <form id="menu" method="POST" action=".">
+                   <input type="submit" value="Home">
+               </form>
+            </div>
+      </div>
+    {% else %}
+      <div>Authorithy name cookie is NOT found</div>
+    {% endif %}
+    <table>
+	<tr><th>Choose an authorithy</th></tr>
+    {% for auth in auths %}
+        <tr><td>
+        <form id="f{{auth}}" method="POST">
+		<input type="hidden" name="CADIR" id="CADIR_{{auth}}" value="{{auth}}">
+		<input type="submit" value="{{auth}}">
+	</form>
+	</td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}

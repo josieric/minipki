@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #FFD600; /* Jaune vif (titre) */
+  --color-bg-normal: #FFFDE7; /* Jaune très clair (fond normal) */
+  --color-bg-plus: #FFF9C4; /* Jaune clair (fond supplémentaire) */
+  --color-border-table: #FFC107; /* Jaune miel (bordure de table) */
+  --color-border-cells: #FFEB3B; /* Jaune lumineux (bordures des cellules) */
+  --color-text: #6D4C41; /* Brun moyen (texte principal, plus doux) */
+  --color-text-hover: #F57F17; /* Jaune foncé au survol */
+  --color-text-ontitle: #C65D2D; /* Orange foncé */
+}

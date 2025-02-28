@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #6A1B9A; /* Violet */
+  --color-bg-normal: #F3E5F5; /* Lavande Très Claire */
+  --color-bg-plus: #E1BEE7; /* Lavande Claire */
+  --color-border-table: #512DA8; /* Violet Foncé */
+  --color-border-cells: #9575CD; /* Violet Doux */
+  --color-text: #311B92; /* Violet Sombre */
+  --color-text-hover: #673AB7; /* Violet au survol */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+}

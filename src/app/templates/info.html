@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>CA: {{ caname }}</h3>
+    <h4>
+	{% if cname != "CRL" and cname != "Certificate Authority" %}
+	  CN:
+	{% endif %}
+	{{ cname }}
+    </h4>
+    <div style="display: flex;justify-content: center;">
+	    <div>
+               <form id="menu" method="POST" action=".">
+                   <input type="submit" value="Home">
+               </form>
+	    </div>
+	    <div>
+	       <form id="dl" method="POST" action="download">
+		   <input type="hidden" name="file" value="{{fname}}">
+		   {% if cname == "CRL" %}
+		     <input type="hidden" name="cname" value="{{caname}}">
+		   {% else %}
+		     <input type="hidden" name="cname" value="{{cname}}">
+		   {% endif %}
+		   <input type="submit" value="download">
+	       </form>
+	    </div>
+	{% if cname == "CRL" %}
+              <div>
+                 <form id="form3" method="POST" action="newcrl">
+                   <input type="submit" value="Regen CRL">
+                 </form>
+              </div>
+	{% endif %}
+	{% if cname != "CRL" and cname != "Certificate Authority" %}
+            <div>
+              <form id="keypem" method="POST" action="download">
+		   {% if fname[-4:] == ".crt" %}
+                      <input type="hidden" name="file" value="{{fname | replace('.crt','.key') }}">
+		   {% else %}
+		      {% set mipath = fname.split('/') %}
+		      <input type="hidden" name="file" value="{{mipath[:-1] | join('/')}}/{{fname.split("/")[0]}}.key">
+		   {% endif %}
+                   <input type="hidden" name="cname" value="{{cname}}">
+                   <input type="submit" value="Get key">
+              </form>
+            </div>
+            <div>
+              <form id="pkcs12" method="POST" action="pkcs12">
+                   <input type="hidden" name="cname" value="{{cname}}">
+                   <input type="hidden" name="ctype" value="{{fname.split("/")[0]}}">
+                   <input type="submit" value="pkcs12">
+              </form>
+            </div>
+            <div>
+              <form id="revoke" method="POST" action="revoke/{{cname}}">
+                   <input type="submit" value="Revoke">
+              </form>
+            </div>
+            <div>
+              <form id="message" method="POST" action="message">
+                   <input type="hidden" name="cname" value="{{cname}}">
+                   <input type="hidden" name="ctype" value="{{fname.split("/")[0]}}">
+                   <input type="submit" value="crypt/sign">
+              </form>
+            </div>
+            <div>
+              <form id="mess_to" method="POST" action="mess_to">
+                   <input type="hidden" name="cname" value="{{cname}}">
+                   <input type="hidden" name="ctype" value="{{fname.split("/")[0]}}">
+                   <input type="submit" value="message to">
+              </form>
+            </div>
+            <div>
+              <form id="mess_from" method="POST" action="mess_from">
+                   <input type="hidden" name="cname" value="{{cname}}">
+                   <input type="hidden" name="ctype" value="{{fname.split("/")[0]}}">
+                   <input type="submit" value="message from">
+              </form>
+            </div>
+	{% endif %}
+    </div>
+    <table>
+        {% for v in crtdata[:-1] %}
+	<tr> <td> {{ v }} </td> </tr>
+        {% endfor %}
+	<tr> <td>
+	  {% for v in crtdata | last %}
+	    {{ v }} <br>
+	  {% endfor %}
+	</td> </tr>
+    </table>
+
+{% endblock %}

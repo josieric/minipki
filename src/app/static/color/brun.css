@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #8B4513; /* Brun (titre) */
+  --color-bg-normal: #FAF3E0; /* Beige clair (fond normal) */
+  --color-bg-plus: #D8BFD8; /* Rosé beige (fond supplémentaire) */
+  --color-border-table: #A0522D; /* Brun foncé (bordure de table) */
+  --color-border-cells: #C8AD7B; /* Brun doux (bordures des cellules) */
+  --color-text: #4B3D26; /* Brun sombre (texte principal) */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+  --color-text-hover: #DEB887; /* Brun clair (texte au survol) */
+}

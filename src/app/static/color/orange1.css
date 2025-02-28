@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #FF7F50; /* Coral (titre) */
+  --color-bg-normal: #F5F5F5; /* Gris très clair */
+  --color-bg-plus: #FFE4B5; /* Moccasin (gris orangé clair) */
+  --color-border-table: #D2691E; /* Chocolate (bordure de table) */
+  --color-border-cells: #A9A9A9; /* Dark Gray (bordures des cellules) */
+  --color-text: #696969; /* Dim Gray (texte principal) */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+  --color-text-hover: #FF4500; /* Orange Red (texte au survol) */
+}

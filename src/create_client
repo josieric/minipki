@@ -1,0 +1,55 @@
+#! /bin/bash
+
+cd `dirname $0`
+if [ -f $ACNAME/env.sh ] ; then
+  . $ACNAME/env.sh
+else
+  exit 12
+fi
+
+CLINAME=$1
+NBDAYS=$2
+[ -z "$NBDAYS" ] && NBDAYS=7300
+
+if [ -z "$CLINAME" ] ; then
+  echo -e "${RED}First parameter must be a client name !!$NORMAL"
+  exit 12
+fi
+
+CLIDIR=${CLIDIR}$CLINAME/
+if [ -d $CLIDIR ] ; then
+  echo -e "${RED}Client $CLINAME already exists !!$NORMAL"
+  exit 12
+fi
+SERVERDIR=${SERVERDIR}$CLINAME/
+if [ -d $SERVERDIR ] ; then
+  echo -e "${RED}Server $CLINAME already exists !!$NORMAL"
+  exit 12
+fi
+mkdir $CLIDIR
+
+echo -e "$COLORED\nCreate client $CLINAME private key and csr$NORMAL"
+openssl req -nodes -new -newkey ${KEYTYPE} -sha512 -keyout ${CLIDIR}client.key -out ${CLIDIR}client.csr -subj "/CN=$CLINAME$SUFFIX_DN"
+echo $NBDAYS
+
+SERIAL=`cat ${CADIR}/serial`
+echo -e "$COLORED\nGenerate certicate based on client's CSR using CA certificate and private key ($NBDAYS days)$NORMAL"
+#openssl ca -batch -preserveDN -config ${CADIR}ca.conf -in ${CLIDIR}client.csr -outdir ${CLIDIR} -out ${CLIDIR}client.crt -days $NBDAYS -extfile <(printf "extendedKeyUsage = clientAuth")
+#openssl ca -batch -preserveDN -create_serial -config ${CADIR}ca.conf -notext -in ${CLIDIR}client.csr -outdir ${CLIDIR} -out ${CLIDIR}client.crt -enddate 120815090000Z -days $NBDAYS \
+openssl ca -batch -preserveDN -create_serial -config ${CADIR}ca.conf -notext -in ${CLIDIR}client.csr -outdir ${CLIDIR} -out ${CLIDIR}client.crt -days $NBDAYS \
+	   -extfile <(printf "extendedKeyUsage = clientAuth,codeSigning,emailProtection\ncrlDistributionPoints = URI:${CRLURL}")
+
+ln -sf $SERIAL.pem ${CLIDIR}client.crt
+
+## Create rsa key and pub for future use with format pkcs1 & pkcs8 + OpenSSH2
+# Priv rsa from pkey
+openssl pkey -in ${CLIDIR}client.key -traditional -out ${CLIDIR}rsa_pkcs1
+# Pub (2 format ssh2 et openssl
+openssl x509 -pubkey -noout -in ${CLIDIR}client.crt -out ${CLIDIR}rsa.pub
+ssh-keygen -y -f ${CLIDIR}client.key > ${CLIDIR}rsa_ssh2.pub
+ssh-keygen -e -f ${CLIDIR}rsa_ssh2.pub -m pem > ${CLIDIR}rsa_pkcs1.pub
+
+echo -e "$COLORED\nVerify the certificate (optional)$NORMAL"
+openssl verify -CAfile ${CADIR}ca.crt ${CLIDIR}client.crt
+
+

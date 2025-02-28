@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>Create Authorithy</h3>
+    <div style="display: flex;justify-content: center;">
+	    <div>
+               <form id="menu" method="POST" action=".">
+                   <input type="submit" value="Home">
+               </form>
+	    </div>
+    </div>
+    <script language="javascript">
+	 function gogo() {
+	   var val = document.getElementById('caname').value;
+	   if (val !== null && val !== '') {
+	     form = document.getElementById('fcreate');
+	     form.action = "createCA";
+	     form.submit();
+	   }
+	   else {
+	     alert("Name is empty !!!");
+	   }
+         }
+    </script>
+    <form id="fcreate" method="POST" action="javascript:gogo()" >
+    <table>
+	    <tr><th colspan="2">Create new authority</th></tr>
+	    <tr><th>Name</th><td><input name="caname" id="caname"></td></tr>
+	    <tr><th>Suffix DN</th><td><input name="suffixdn" id="suffixdn" value="/OU=unit/O=org/C=FR"></td></tr>
+	    <tr><th>FQDN for CRL</th><td><input name="fqdn_crl" id="fqdn_crl" value="localhost"></td></tr>
+	    <tr><th>Port for CRL</th><td><input name="port_crl" id="port_crl" value="5080"></td></tr>
+	    <tr><td colspan="2" align="center"><input type="button" value="Ok" onclick="javascript:gogo()"></td></tr>
+    </table>
+    </form>
+
+{% endblock %}

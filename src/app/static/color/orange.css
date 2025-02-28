@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #FF9800; /* Orange vif (titre) */
+  --color-bg-normal: #FFF3E0; /* Orange très clair (fond normal) */
+  --color-bg-plus: #FFE0B2; /* Orange clair (fond supplémentaire) */
+  --color-border-table: #FB8C00; /* Orange foncé (bordure de table) */
+  --color-border-cells: #FFB74D; /* Orange doux (bordures des cellules) */
+  --color-text: #E65100; /* Orange sombre (texte principal) */
+  --color-text-hover: #D84315; /* Orange rougeâtre au survol */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+}

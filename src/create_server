@@ -1,0 +1,50 @@
+#! /bin/bash
+
+cd `dirname $0`
+if [ -f $ACNAME/env.sh ] ; then
+  . $ACNAME/env.sh
+else
+  exit 12
+fi
+
+
+SERVERNAME=$1
+
+NBDAYS=$2
+[ -z "$NBDAYS" ] && NBDAYS=7300
+
+SERVERDIR=${SERVERDIR}$SERVERNAME/
+if [ -d $SERVERDIR ] ; then
+  echo -e "${RED}Server $SERVERNAME already exists !!$NORMAL"
+  exit 12
+fi
+CLIDIR=${CLIDIR}$SERVERNAME/
+if [ -d $CLIDIR ] ; then
+  echo -e "${RED}Client $SERVERNAME already exists !!$NORMAL"
+  exit 12
+fi
+mkdir $SERVERDIR
+
+echo -e "$COLORED\nCreate server private key and csr for $SERVERNAME$NORMAL"
+openssl req -nodes -new -newkey ${KEYTYPE} -sha512 -keyout ${SERVERDIR}server.key -out ${SERVERDIR}server.csr -subj "/CN=$SERVERNAME$SUFFIX_DN"
+
+SERIAL=`cat ${CADIR}/serial`
+##echo subjectAltName = DNS:*.linc.fr,DNS:*.dil.fr,DNS:localhost,IP:10.22.0.0/16,IP:127.0.0.1 >> extfile.cnf
+
+echo -e "$COLORED\nGenerate certicate based on server's CSR using CA certificate and private key ($NBDAYS days)$NORMAL"
+openssl ca -batch -preserveDN -create_serial -config ${CADIR}ca.conf -in ${SERVERDIR}server.csr -outdir ${SERVERDIR} -out ${SERVERDIR}server.crt -days $NBDAYS \
+             -extfile <(printf "extendedKeyUsage = serverAuth\ncrlDistributionPoints = URI:${CRLURL}\nsubjectAltName = DNS:$SERVERNAME,DNS:localhost,IP:127.0.0.1")
+
+ln -sf $SERIAL.pem ${SERVERDIR}server.crt
+
+# Create rsa key and pub for future use with format pkcs1 & pkcs8 + OpenSSH2
+# Priv rsa from pkey
+openssl pkey -in ${SERVERDIR}server.key -traditional -out ${SERVERDIR}rsa_pkcs1
+# Pub (2 format ssh2 et openssl
+openssl x509 -pubkey -noout -in ${SERVERDIR}server.crt -out ${SERVERDIR}rsa.pub
+ssh-keygen -y -f ${SERVERDIR}server.key > ${SERVERDIR}rsa_ssh2.pub
+ssh-keygen -e -f ${SERVERDIR}rsa_ssh2.pub -m pem > ${SERVERDIR}rsa_pkcs1.pub
+
+echo -e "$COLORED\nVerify the certificate (optional)$NORMAL"
+openssl verify -CAfile ${CADIR}ca.crt ${SERVERDIR}server.crt
+

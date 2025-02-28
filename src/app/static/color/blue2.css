@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #007BFF; /* Bleu vif */
+  --color-bg-normal: ##E6E6E6; /* Gris très clair */
+  --color-bg-plus: #A9B3C1; /* Gris clair */
+  --color-border-table: #007BFF; /* Bleu vif pour la bordure */
+  --color-border-cells: #CED4DA; /* Gris pour les bordures */
+  --color-text: #343A40; /* Gris foncé pour le texte */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+  --color-text-hover: #FF6F61; /* Corail pour le survol */
+}

@@ -1,0 +1,32 @@
+#! /bin/bash
+
+
+cd `dirname $0`
+if [ -f $ACNAME/env.sh ] ; then
+  . $ACNAME/env.sh
+else
+  exit 12
+fi
+
+NAME=$1
+if [ -z "$NAME" ] ; then
+  echo -e "${RED}First parameter must be a client or server name !!$NORMAL"
+  exit 12
+fi
+
+MIDIR=${CLIDIR}$NAME/
+fname=client
+if [ ! -d $MIDIR ] ; then
+  MIDIR=${SERVERDIR}$NAME/
+  fname=server
+fi
+if [ ! -d $MIDIR ] ; then
+  echo -e "${RED}$NAME is not found in client and server !!$NORMAL"
+  exit 12
+fi
+
+# revoke in openssl ca database
+openssl ca -config ${CADIR}ca.conf -revoke ${MIDIR}${fname}.crt
+# remove symlink == only file SERIAL.pem in $MIDIR
+[ $? -eq 0 ] && \rm ${MIDIR}${fname}.crt
+

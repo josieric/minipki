@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #FF4500; /* Orange Red pour le titre */
+  --color-bg-normal: #FFE4E1; /* Misty Rose */
+  --color-bg-plus: #FFB6C1; /* Light Pink */
+  --color-border-table: #B22222; /* Firebrick pour la bordure de table */
+  --color-border-cells: #CD5C5C; /* Indian Red pour la bordure des cellules */
+  --color-text: #8B0000; /* Dark Red pour le texte */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+  --color-text-hover: #FF6347; /* Tomato pour le texte au survol */
+}

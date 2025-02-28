@@ -1,0 +1,10 @@
+:root {
+  --color-bg-title: #4CAF50; /* Vert moyen (titre) */
+  --color-bg-normal: #E8F5E9; /* Vert très clair (fond normal) */
+  --color-bg-plus: #C8E6C9; /* Vert clair (fond supplémentaire) */
+  --color-border-table: #388E3C; /* Vert foncé (bordure de table) */
+  --color-border-cells: #A5D6A7; /* Vert doux (bordures des cellules) */
+  --color-text: #2E7D32; /* Vert sombre (texte principal) */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+  --color-text-hover: #81C784; /* Vert moyen clair (texte au survol) */
+}

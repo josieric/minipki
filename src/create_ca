@@ -1,0 +1,93 @@
+#! /bin/bash
+
+cd `dirname $0`
+NORMAL="\e[0m"
+COLORED="\e[96m"
+RED="\e[0;31m"
+
+
+if [ $# -eq 4 ] ;then
+  ACNAME=$1
+  SUFFIX_DN=$2
+  DNSFQDN=$3
+  CRLPORT=$4
+elif [ -f ./env.sh ] ;then
+  . ./env.sh
+else
+  echo -e "${RED}Can't find env or params$NORMAL"
+  echo -e "${COLORED}Syntaxe:$NORMAL $0 <Authorithy name> <Authority suffix dn> <FQDN for CertificateRevokeList> <port for CertificateRevokeList>\n"
+  exit 12
+fi
+
+echo -e "${COLORED}Infos:$NORMAL $ACNAME $SUFFIX_DN $DNSFQDN:$CRLPORT"
+ls -l ${ACNAME} ${ACNAME}/client ${ACNAME}/server 2>/dev/null
+if [ -e ${ACNAME} ]; then
+  echo -e "${RED}$ACNAME already exists !!$NORMAL\nrm -rf $ACNAME ??"
+  exit 12
+  ## echo -e "$RED\ndelete all keys and certificates in $ACNAME$NORMAL"
+fi
+
+mkdir ${ACNAME}
+if [ $? -ne 0 ]; then
+  echo -e "${RED}Can't create directory $acname$NORMAL"
+  exit 12
+fi
+
+cat - <<EOF > ${ACNAME}/env.sh
+ACNAME=$ACNAME
+SUFFIX_DN="$SUFFIX_DN"
+DNSFQDN=$DNSFQDN
+CRLPORT=$CRLPORT
+
+CRLURL="http://$DNSFQDN:$CRLPORT/crl"
+
+KEYTYPE=rsa:4096
+NBDAYS=365
+ACNBDAYS=7300
+
+CADIR=./${ACNAME}/
+CLIDIR=./${ACNAME}/client/
+SERVERDIR=./${ACNAME}/server/
+NORMAL="$NORMAL"
+COLORED="$COLORED"
+RED="$RED"
+EOF
+chmod +x ${ACNAME}/env.sh
+. ${ACNAME}/env.sh
+
+mkdir -p ${CADIR}client
+mkdir ${CADIR}server
+
+touch ${CADIR}database.dat
+echo ABCDEF01 > ${CADIR}serial
+echo 01 > ${CADIR}crlnumber
+
+cat - <<EOF > ${CADIR}ca.conf
+[ ca ]
+default_ca = $ACNAME
+
+[ $ACNAME ]
+database = ${CADIR}database.dat
+serial = ${CADIR}serial
+certificate = ${CADIR}ca.crt
+private_key = ${CADIR}ca.key
+default_md = sha512
+policy = policy_match
+default_days = $NBDAYS
+crlnumber = ${CADIR}crlnumber
+default_crl_days = 7
+unique_subject = yes
+
+[policy_match]
+commonName = supplied
+EOF
+
+echo -e "$COLORED\nCreate CA $ACNAME (20 year)$NORMAL\n\t dir=$CADIR"
+openssl req -noenc -new -newkey ${KEYTYPE} -sha512 -x509 -days $ACNBDAYS -keyout ${CADIR}ca.key -out ${CADIR}ca.crt -subj "/CN=$ACNAME$SUFFIX_DN" \
+       	-addext "subjectKeyIdentifier = hash" \
+       	-addext "authorityKeyIdentifier = keyid,issuer" \
+       	-addext "basicConstraints = critical, CA:true" \
+       	-addext "keyUsage=critical,digitalSignature,cRLSign,keyCertSign" \
+	-addext "crlDistributionPoints=URI:$CRLURL"
+ 
+

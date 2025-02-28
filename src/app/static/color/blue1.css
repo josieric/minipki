@@ -1,0 +1,10 @@
+:root { 
+  --color-bg-title: #1E90FF; /* Dodger Blue pour le titre */
+  --color-bg-normal: #E0F7FA; /* Bleu clair */
+  --color-bg-plus: #B0E0E6; /* Powder Blue */
+  --color-border-table: #4682B4; /* Steel Blue pour la bordure de table */
+  --color-border-cells: #87CEFA; /* Light Sky Blue pour la bordure des cellules */
+  --color-text: #00008B; /* Dark Blue pour le texte */
+  --color-text-ontitle: #FFFFFF; /* Texte blanc sur le titre */
+  --color-text-hover: #00BFFF; /* Deep Sky Blue pour le texte au survol */
+}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+<script language="javascript">
+	 function gogo() {
+	   var val = document.getElementById('mtype').value;
+	   if (val !== null && val !== '') {
+	     form = document.getElementById('miform');
+	     // form.action = val;
+	     form.submit();
+	   }
+	   else {
+	     alert("Message is empty !!!");
+	   }
+         }
+        // Fonction pour mettre à jour le select key 
+        function updateKey(action) {
+            const keySelect = document.getElementById('key');
+	    var options = [];
+            if (action === 'encrypt' || action === 'verify') {
+		    options = {{pubs | safe }} ;
+            } else if (action === 'decrypt' || action === 'sign') {
+		    options =  {{ privs | safe }} ;
+            }
+	    stro="";
+	    for (const o of options) {
+		 stro += '<option value='+o+'>'+o+'</option>';
+            }
+	    keySelect.innerHTML=stro;
+	    const verifmess = document.getElementById('verifmess');
+	    const vmess = document.getElementById('vmess');
+	    if (action === 'verify') {
+	       vmess.style="display:block";
+	       verifmess.value='';
+	       document.getElementById('message').rows = 8;
+	    }
+	    else {
+	       vmess.style="display:none";
+	       document.getElementById('message').rows = 14;
+	    }
+        }
+</script>
+
+<h3>CA: {{caname}}</h3>
+      <div style="display: flex;justify-content: center;">
+            <div>
+               <form id="menu" method="POST" action=".">
+                   <input type="submit" value="Home">
+               </form>
+            </div>
+            <div>
+               <form id="back" method="GET" action="info">
+		   <input type="hidden" name="file" value="{{ctype}}/{{cname}}/{{ctype}}.crt">
+                   <input type="submit" value="Back">
+               </form>
+            </div>
+      </div>
+    <form id="miform" method="POST">
+     <input type="hidden" name="cname" value="{{cname}}">
+     <input type="hidden" name="ctype" value="{{ctype}}">
+          <table><th>Short message &amp; signature from/to {{ctype}} {{cname}}</th>
+	   <tr>
+	      <td>
+		<div style="display: flex;justify-content: center;">
+		 <div>
+		  <span>
+		     Encrypt: <input type="radio" id="mtype" name="mtype" value="encrypt" {% if mtype == 'encrypt' %} CHECKED {% endif %} onchange="javascript:updateKey(this.value)">
+		  </span><br>
+		  <span title="With sha512 hash">
+		     Sign: <input type="radio" id="mtype" name="mtype" value="sign" {% if mtype == 'sign' %} CHECKED {% endif %} onchange="javascript:updateKey(this.value)">
+	          </span>
+		 </div>
+		 <div>
+		  <span>
+                     Decrypt: <input type="radio" id="mtype" name="mtype" value="decrypt" {% if mtype == 'decrypt' %} CHECKED {% endif %} onchange="javascript:updateKey(this.value)">
+		  </span><br>
+		  <span title="With sha512 hash">
+                     Verify: <input type="radio" id="mtype" name="mtype" value="verify" {% if mtype == 'verify' %} CHECKED {% endif %} onchange="javascript:updateKey(this.value)">
+	          </span>
+		 </div>
+		</div>
+	      </td>
+	   </tr>
+	   <tr>
+	   <td colspan="2">
+		<span tilte="Key to use for operation">Key:</span>
+		<select id="key" name="key">
+		  {% if mtype == 'decrypt' or mtype == 'sign' %}
+		     {% for k in privs %}
+		       <option value="{{k}}"
+			  {% if keyused == k %} SELECTED {% endif %}
+		       >{{k}}</option>
+		     {% endfor %}
+		  {% else %}
+                     {% for k in pubs %}
+                       <option value="{{k}}"
+			  {% if keyused == k %} SELECTED {% endif %}
+		       >{{k}}</option>
+                     {% endfor %}
+		  {% endif %}
+		</select>
+	   </td></tr>
+	   <tr><td colspan="2">
+                <input type="button" value="Ok" onclick="javascript:gogo()">
+	   </td></tr>
+	  </table>
+	  <table>
+	      <tr><td>
+		<textarea id="message" name="message" cols="80" rows="{% if mtype == 'verify' %}8{% else %}14{% endif %}">{{message}}</textarea>
+		<div id="vmess" style="display:{% if mtype == 'verify' %}block{% else %}none{% endif %}">
+		   <textarea id="verifmess" name="verifmess" cols="80" rows="8">{{verifmess}}</textarea>
+		</div>
+	      </td></tr>
+	      <tr><td>
+               {% if addinfo != '' %}
+                   <h6>{{addinfo}}</h6>
+               {% endif %}
+	       <pre>{{result}}</pre>
+	      </td></tr>
+	  </table>
+    </form>
+{% endblock %}

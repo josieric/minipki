@@ -1,0 +1,144 @@
+html, body {
+	background-color: var(--color-bg-normal);
+	color: var(--color-text);
+	text-align: center;
+	font-family: Roboto, sans-serif;
+	padding-top:5px;
+}
+
+table {
+  border: 2px solid var(--color-border-table);
+  background-color: var(--color-bg-normal);
+  width: 70%;
+  text-align: center;
+  border-collapse: separate;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 10px; /* Augmentez le padding pour les cellules */
+  margin-left:auto; margin-right:auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère pour le tableau */
+}
+table tr:hover {
+    background: var(--color-bg-plus); /* Fond léger au survol de la ligne */
+}
+td, th, tr {
+  border: 1px solid var(--color-border-cells);
+  padding: 3px 2px;
+  border-radius: 4px;
+}
+th {
+  background: var(--color-bg-title) ;
+  font-size: 18px;
+  color: var(--color-text-ontitle);
+}
+table tr:nth-child(even) > td {
+  background: var(--color-bg-plus);
+}
+
+a {
+	font-size: normal;
+	color: var(--color-text);
+	font-weight: normal;
+	transition: color 0.3s ease; /* Transition douce pour le survol */
+}
+a:hover {
+	color:var(--color-text-hover) ;
+	font-weight: bolder;
+}
+
+#title {
+	font-size: 45px;
+	background: var(--color-bg-title) ;
+	border: 2px solid var(--color-border-table);
+	border-radius: 4px;
+	color: var(--color-text-ontitle);
+	margin: 11px;
+	padding: 5px;
+	text-align: center;
+	font-weight: bolder;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre pour les titres */
+}
+h1,h2,h3,h4,h5,h6 {
+	border-radius: 4px;
+	border: 2px solid var(--color-border-table);
+	text-decoration: underline;
+	margin: 15px;
+	padding: 10px;
+	margin-left:auto;
+	margin-right:auto;
+	text-align: center;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre pour les titres */
+}
+h1 {
+	font-size: 22px;
+	text-decoration: none;
+	background: var(--color-bg-title) ;
+	color: var(--color-text-ontitle);
+	width: 75%;
+}
+h2 {
+	font-size: 20px;
+	color: var(--color-bg-title);
+	background: var(--color-bg-plus) ;
+	width: 66%;
+}
+h3 {
+	font-size: 18px;
+	color: var(--color-bg-title);
+	width: 60%;
+}
+h4 {
+	font-size: 16px;
+	color: var(--color-bg-title);
+	width: 50%;
+}
+h5 {
+        font-size: 14px;
+        color: var(--color-bg-title);
+        width: 45%;
+}
+h6 {
+        font-size: 12px;
+        color: var(--color-bg-title);
+        width: 40%;
+}
+
+
+input {
+	border-radius: 5px;
+	border: 1px solid var(--color-text);
+	padding: 5px;
+	margin: 5px
+}
+input:focus {
+	border: 2px solid var(--color-border-table);
+	background: var(--color-bg-plus) ;
+}
+select {
+	border-radius: 5px;
+	border: 1px solid var(--color-text);
+	padding: 5px;
+	margin: 5px
+}
+select:focus {
+	border: 1px solid var(--color-border-table);
+	background: var(--color-bg-plus) ;
+}
+
+button {
+    border-radius: 5px;
+    border: none; /* Enlevez la bordure par défaut */
+    background: var(--color-bg-title);
+    color: var(--color-text-ontitle);
+    padding: 10px 15px; /* Padding pour un plus grand espace */
+    cursor: pointer; /* Changez le curseur en main sur hover */
+    transition: background 0.3s ease, color 0.3s ease; /* Transition pour le bouton */
+}
+button:hover {
+    background: var(--color-text-hover);
+    color: var(--color-text-ontitle);
+}
+div {
+	border-radius: 4px;
+}
+
