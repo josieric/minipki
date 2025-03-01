@@ -2,9 +2,12 @@
 {% block content %}
     <h3>Certificate Authorithy name</h3>
     {%  if caname is not none %}
-    <div>Authorithy name in your cookie is <b>{{caname}}</b></div>
+      <div>Authorithy name in your cookie is <b>{{caname}}</b></div>
+    {% else %}
+      <div>Authorithy name cookie is NOT found</div>
+    {% endif %}
       <div style="display: flex;justify-content: center;">
-            <div>  
+            <div>
                <form id="createCA" method="POST" action="createCA">
                    <input type="submit" value="Create CA">
                </form>
@@ -15,9 +18,7 @@
                </form>
             </div>
       </div>
-    {% else %}
-      <div>Authorithy name cookie is NOT found</div>
-    {% endif %}
+
     <table>
 	<tr><th>Choose an authorithy</th></tr>
     {% for auth in auths %}

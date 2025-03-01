@@ -1,0 +1,30 @@
+#! /bin/bash
+
+returnCRL() {
+   echo -ne "HTTP/1.1 200 OK\r\nContent-Type: application/pkix-crl\r\nContent-Disposition: inline; filename=\"${ACNAME}.crl\"\r\nConnection: close\r\n\r\n"
+   cat ${ACNAME}/ca.crl 2>/dev/null
+}
+
+server() {
+  if [ ! -f "${CADIR}ca.crl" ];then
+    ./create_crl
+  fi
+  socat -d TCP4-L:$CRLPORT,reuseaddr,fork,bind=0.0.0.0 exec:"$0" &
+}
+
+cd `dirname $0`
+[ ! -z "$1" ] && export ACNAME=$1
+
+if [ -f $ACNAME/env.sh ] ; then
+  . $ACNAME/env.sh
+else
+  echo "Can't start"
+  exit 12
+fi
+
+if [ `env | grep SOCAT | wc -l` -ne  0 ]; then
+   returnCRL
+else
+   server
+fi
+
