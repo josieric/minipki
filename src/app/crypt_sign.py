@@ -2,7 +2,7 @@ import subprocess,base64,tempfile
 
 def encrypt(mikey:str,message:str,key_is_cert:bool = False) -> (str,str):
       result=None
-      message_c = message.replace('\r','')
+      message_c = message.replace('\r','').replace("'","'\\''")
       cmd = f"echo -n '{message_c}' | openssl pkeyutl -encrypt -pubin -inkey {mikey}"
       if key_is_cert:
         cmd = f"{cmd} -certin"
@@ -27,7 +27,7 @@ def decrypt(mikey:str,message:str) -> (str,str):
       return (result,cmd)
 
 def sign(mikey:str,message:str) -> (str,str):
-      message_c = message.replace('\r','')
+      message_c = message.replace('\r','').replace("'","'\\''")
       cmd = f"echo -n '{message_c}' | openssl dgst -sha512 -binary | openssl pkeyutl -sign -inkey {mikey}"
       ret = subprocess.run( cmd , shell=True, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
       if ret.returncode == 0:
