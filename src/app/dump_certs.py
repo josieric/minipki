@@ -56,7 +56,28 @@ def read_cert(pemfile, revoked="V"):
       revoked="E"
   extent=[]
   for ext in cert.extensions:
-     extent.append(f"{ext.value}")
+     if isinstance(ext.value, x509.extensions.ExtendedKeyUsage):
+       vals = [x._name for x in ext.value or []]
+       extent.append(f"{ext.oid._name}: {vals}")
+     elif isinstance(ext.value, x509.extensions.CRLDistributionPoints):
+       vals = [x for x in ext.value or []]
+       extent.append(f"{ext.oid._name}: {vals}")
+     elif isinstance(ext.value, x509.extensions.SubjectKeyIdentifier):
+       extent.append(f"{ext.oid._name}: {format_fingerprint(ext.value.digest.hex())}")
+     elif isinstance(ext.value, x509.extensions.AuthorityKeyIdentifier):
+       key_identifier=format_fingerprint(ext.value.key_identifier.hex())
+       authority_cert_issuer=None
+       authority_cert_serial_number=None
+       if ext.value.authority_cert_issuer is not None:
+         authority_cert_issuer=format_fingerprint(ext.value.authority_cert_issuer.hex())
+       if ext.value.authority_cert_serial_number is not None:
+         authority_cert_serial_number=format_fingerprint(ext.value.authority_cert_serial_number.hex())
+       extent.append(f"{ext.oid._name}: key_identifier={key_identifier}, authority_cert_issuer={authority_cert_issuer}, authority_cert_serial_number={authority_cert_serial_number}")
+     elif isinstance(ext.value, x509.extensions.SubjectAlternativeName):
+
+       extent.append(f"{ext.oid._name} {[x._value for x in ext.value or []]}")
+     else:
+       extent.append(f"{ext.value}")
 
   return((serial,dn,label,not_after,not_before,revoked,md5_fp,sha1_fp,sha256_fp,extent))
 
