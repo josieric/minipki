@@ -71,12 +71,13 @@
                 <td colspan="2" align="left" valign="top">
 		   <div>
 			La différence est principalement dans la partie publique de ces clés.<br>
-			Avec les certificats 'x509', il existe plusieurs informations qui n'existent pas avec une 'simple' clé SSH. Ces informations sont prises en compte (ou pas) par les 'correspondants' humains ou logiciels.<br>
+			Avec les certificats 'x509', il existe plusieurs informations qui n'existent pas avec une 'simple' clé SSH: signataire (issuer),Common Name (CN: Nom du service ou personne qui detient le certificat), rôle du certificat (Extension qui designe l'utilisation : Authentifier un client ou service, signer du code, crypter des emails ...).<br>
+			Parmis ces informations il y a en 4 qui seront prises en compte (ou pas) par les 'correspondants' humains ou logiciels, afin die valider la commmunication ou non:<br>
 			<ol>
-				<li>Date de fin de validité</li>
-				<li>Confiance dans l'autorité signataire</li>
+				<li>Date de validité (not_before, not_after)</li>
+				<li>Confiance dans l'autorité signataire (Trust issuers)</li>
 				<li>Common Name (CN) du certificat correspond à celui utilisé par le 'correspondant'</li>
-				<li>La clé n'a pas été révoquée. Cf CRL (Certificate Revoke List) ou OCSP (Online Certificate Status Protocol)</li>
+				<li>Le certificat n'a pas été révoqué: CRL (Certificate Revoke List) ou OCSP (Online Certificate Status Protocol)</li>
 			</ol>
 		   </div>
 		   <div>
