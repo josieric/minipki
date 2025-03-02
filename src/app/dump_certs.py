@@ -74,7 +74,6 @@ def read_cert(pemfile, revoked="V"):
          authority_cert_serial_number=format_fingerprint(ext.value.authority_cert_serial_number.hex())
        extent.append(f"{ext.oid._name}: key_identifier={key_identifier}, authority_cert_issuer={authority_cert_issuer}, authority_cert_serial_number={authority_cert_serial_number}")
      elif isinstance(ext.value, x509.extensions.SubjectAlternativeName):
-
        extent.append(f"{ext.oid._name} {[x._value for x in ext.value or []]}")
      else:
        extent.append(f"{ext.value}")
