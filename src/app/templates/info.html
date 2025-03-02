@@ -83,11 +83,11 @@
         {% for v in crtdata[:-1] %}
 	<tr> <td> {{ v }} </td> </tr>
         {% endfor %}
-	<tr> <td>
+	<tr> <td align="left"><ul>
 	  {% for v in crtdata | last %}
-	    {{ v }} <br>
+		<li>{{ v }} </li>
 	  {% endfor %}
-	</td> </tr>
+	</ul></td> </tr>
     </table>
 
 {% endblock %}
