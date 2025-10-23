@@ -16,13 +16,19 @@ def crlinfos(filename:str = 'ca.crl'):
   ## crl.get_revoked_certificate_by_serial_number(0xabcdef02)
   certs=[]
   for c in crl:
-    certs.append([hex(c.serial_number),c.revocation_date_utc])
+    if hasattr(c, 'revocation_date_utc'):
+      certs.append([hex(c.serial_number),c.revocation_date_utc])
+    else:
+      certs.append([hex(c.serial_number),c.revocation_date])
   for e in crl.extensions:
     crl_number=None
     if getattr(e.value,'crl_number'):
       crl_number = e.value.crl_number
       break
-  return((crl_number, crl.issuer.rfc4514_string(), crl.last_update_utc, crl.next_update_utc, certs))
+  if hasattr(crl, 'last_date_utc'):
+     return((crl_number, crl.issuer.rfc4514_string(), crl.last_update_utc, crl.next_update_utc, certs))
+  else:
+     return((crl_number, crl.issuer.rfc4514_string(), crl.last_update, crl.next_update, certs))
 
 def read_cert(pemfile, revoked="V"):
   with open(pemfile) as fh:
