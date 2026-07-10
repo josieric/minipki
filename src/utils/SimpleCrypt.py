@@ -40,10 +40,10 @@ class crypto:
        return gzip.compress(pickle.dumps(data, 4))
 
     @staticmethod
-    def genere_key(size:int=256):
+    def genere_key(size:int=32):
       return subprocess.run(f'openssl rand -base64 {size} | tr -d "\n"', stderr=subprocess.STDOUT, shell=True, stdout=subprocess.PIPE, text=True).stdout
     @staticmethod
-    def write_key(keyfile:str, size:int=256):
+    def write_key(keyfile:str, size:int=32):
       dt=time.time()
       return subprocess.run(f'openssl rand -writerand {keyfile} {size}', stderr=subprocess.STDOUT, shell=True, stdout=subprocess.PIPE).returncode
 
