@@ -1,5 +1,6 @@
-#! /bin/env python
+#! /usr/bin/env python
 
+import cryptography
 from cryptography import x509
 from cryptography.hazmat.primitives.serialization import Encoding
 from cryptography.hazmat.primitives import hashes
@@ -32,11 +33,11 @@ class cacert:
               self.ident[cert.signature] = i
               i += 1
      except FileNotFoundError:
-       print(f"Le fichier {file_path} n'a pas été trouvé.")
+       print(f"{self.RED}Le fichier {self.file_path} n'a pas été trouvé.{self.NORMAL}")
      except IOError:
-       print(f"Une erreur s'est produite lors de la lecture du fichier {file_path}.")
+       print(f"{self.RED}Une erreur s'est produite lors de la lecture du fichier {self.file_path}.{self.NORMAL}")
      except x509.InvalidVersion:
-       print("Fichier x509: version invalide.")
+       print(f"{self.RED}Fichier x509: version invalide.{self.NORMAL}")
 
    # Fonction pour extraire un attribut des chain CN=,OU=,O= pour les Label
    # ou une valeur par défaut si l'attribut n'existe pas
@@ -126,6 +127,7 @@ class cacert:
 if __name__ == '__main__':
    option=["check","display","savefile=","isin=","add="]
    def usage():
+     print(f"{cacert.BLUE}cryptography version: {cryptography.__version__}{cacert.NORMAL}")
      print(f"Syntaxe: {cacert.BLUE}{sys.argv[0]} <options> <PEMfile1> .. <PEMfileN>{cacert.NORMAL}")
      print("\tPermet ajout, affichage, sauvegarde de fichier PEM contenant des certificats publics (Ex: cacert.pem)\n")
      print("Les options sont executées dans l'ordre de la ligne de copmmande\n")

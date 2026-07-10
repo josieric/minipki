@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ACTIVATEENV=". /opt/mamba/bin/activate base"
-BINDHOST=localhost
+BINDHOST=0.0.0.0
 URLPREFIX="/pki"
 PORT=5001
 
@@ -56,7 +56,7 @@ case "$1" in
          --max-requests 128 \
          --worker-connections 128 \
          --worker-tmp-dir $APPLOG \
-         --log-level=info \
+         --log-level=debug \
          --pid $APPLOG/pid.log \
 	 --reload \
 	 --daemon \
