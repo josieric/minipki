@@ -4,7 +4,10 @@ from flask import Flask, request, send_from_directory, render_template, Response
 import logging, os, subprocess, re
 #from datetime import datetime
 from .dump_certs import getall_cert, read_cert, crlinfos, list_ca
-from .crypt_sign import encrypt, decrypt, sign, verify
+# Wrapper openSSL
+#from .crypt_sign import encrypt, decrypt, sign, verify
+# Module cryptography
+from .crypt_sign_pycert import encrypt, decrypt, sign, verify
 
 app = Flask(__name__)
 app.logger = logging.getLogger()
