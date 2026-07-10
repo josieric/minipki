@@ -3,7 +3,7 @@
 
 """
 A pure‑Python replacement for the original script that wrapped the OpenSSL CLI.
-It uses the `cryptography` library and reproduces the exact file format
+It uses the `cryptography` library and reproduces the file format
 produced by:
     openssl enc -aes-256-cbc -pbkdf2 -salt -k <password>
 
@@ -12,7 +12,7 @@ Only the parts you actually used are implemented:
   * AES‑256‑CBC with PKCS7 padding
   * OpenSSL “enc” file header: b'Salted__' + 8‑byte salt
   * gzip + pickle (protocol 4) for object (de)serialization
-  * helpers to generate a base‑64 key or a binary key‑file
+  * helpers to generate a key or a binary key‑file
 """
 import base64, gzip, os, pickle, time
 from pathlib import Path
