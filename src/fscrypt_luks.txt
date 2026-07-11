@@ -1,0 +1,23 @@
+
+
+
+
+filename="data.luks"
+devicename="nostradevice"
+
+dd if=/dev/zero of=$filename bs=1024 count=32768
+#dd if=/dev/zero of=$filename bs=1024 count=1048576
+#truncate -s 1G $filename ??
+
+# need root
+cryptsetup luksFormat $filename
+# => YES + passphrase
+cryptsetup open $filename $devicename
+mkfs.ext4 /dev/mapper/$devicename
+mkdir -p data
+mount /dev/mapper/$devicename `pwd`/data
+
+## close
+umount /dev/mapper/$devicename
+cryptsetup close $devicename
+
