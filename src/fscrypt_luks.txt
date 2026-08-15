@@ -1,5 +1,5 @@
 
-
+# apt install cryptsetup
 
 
 filename="data.luks"
@@ -20,4 +20,26 @@ mount /dev/mapper/$devicename `pwd`/data
 ## close
 umount /dev/mapper/$devicename
 cryptsetup close $devicename
+
+
+## cryptsetup -v status /dev/mapper/$devicename
+## cryptsetup luksDump $filename
+
+
+## dd if=/dev/urandom of=/root/volume.key bs=1024 count=4 && chmod 400 /root/volume.key
+
+## cryptsetup luksAddKey $filename /root/volume.key
+## vi /etc/crypttab
+## << nostradevice  /home/eric/codetest/minipki/src/data.luks  /root/volume.key  luks
+
+## cryptsetup luksOpen $filename $devicename --key-file /root/volume.key
+## cryptsetup luksClose $filename
+
+## vi /etc/crypttab
+## << nostradevice  /home/eric/codetest/minipki/src/data.luks  /root/volume.key  luks
+
+## vi /etc/fstab
+## /dev/mapper/mon_volume_chiffre  /mnt/stockage  ext4  defaults  0  2
+## /dev/mapper/mon_volume_chiffre  /mnt/stockage  ext4  defaults,nofail,x-systemd.device-timeout=9s  0  2
+
 
