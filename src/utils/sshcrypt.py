@@ -17,10 +17,11 @@ class crypto:
     crypt_padding = padding.OAEP( mgf=mgf, algorithm=algo, label=None)
     verif_padding = padding.PSS( mgf=mgf, salt_length=padding.PSS.MAX_LENGTH)
 
-    def __init__(self, dirname: str = f"{os.environ['HOME']}/.ssh", fn_pub: str = "id_rsa.pub", fn_key: str = "id_rsa", pub_only: bool = False, size: int = 4096):
+    def __init__(self, dirname: str = f"{os.environ['HOME']}/.ssh", fn_pub: str = "id_rsa.pub", fn_key: str = "id_rsa", pub_only: bool = False, size: int = 4096, passphrase:str = None):
         self.pub_only = pub_only
         self.dirname = dirname
         self._create_size = size
+        self._passphrase = passphrase
         if not os.path.isdir(dirname):
             dirname = os.path.join(os.path.dirname(__file__), dirname)
             os.mkdir(dirname)
@@ -42,12 +43,24 @@ class crypto:
             if os.path.isfile(keyfile):
               logging.info(f"Load {self.dirname} private:{keyfile}")
               with open(keyfile, "rb") as f:
-                self.privateKey = serialization.load_pem_private_key(f.read(), password=None, backend=default_backend())
+                if self._passphrase is not None:
+                  self.privateKey = serialization.load_pem_private_key(f.read(), password=self._passphrase.encode(), backend=default_backend())
+                else:
+                  self.privateKey = serialization.load_pem_private_key(f.read(), password=None, backend=default_backend())
             else: # no keyfile and not pub_only == generate a key file
                 logging.info(f"Create {self.dirname} private:{keyfile}")
                 self.privateKey = rsa.generate_private_key(public_exponent=65537, key_size=self._create_size, backend=default_backend())
+                if self._passphrase is not None:
+                   private_to_write = self.privateKey.private_bytes(encoding=serialization.Encoding.PEM,
+                                                        format=serialization.PrivateFormat.TraditionalOpenSSL,  # ou PKCS8
+                                                        encryption_algorithm=serialization.BestAvailableEncryption(self._passphrase.encode())
+                                                       )
+                else:
+                   private_to_write = self.privateKey.private_bytes(encoding=serialization.Encoding.PEM,
+                                                                    format=serialization.PrivateFormat.TraditionalOpenSSL,
+                                                                    encryption_algorithm=serialization.NoEncryption())
                 with open(keyfile, "wb") as f:
-                   f.write(self.privateKey.private_bytes( encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.TraditionalOpenSSL,encryption_algorithm=serialization.NoEncryption()))
+                   f.write(private_to_write)
                 os.chmod(keyfile, 0o600)
                 force_create_pub = True
 
@@ -189,6 +202,7 @@ def __main__():
     base_group.add_argument('--pubfile', type=str, default='id_rsa.pub', help="Public key file name (default: %(default)s).")
     base_group.add_argument('--keyfile', type=str, default='id_rsa', help="Private key file name (default: %(default)s).")
     base_group.add_argument('--size'   , type=int, default=4096, help="RSA Key size. (default: %(default)s)")
+    base_group.add_argument('--passphrase'   , type=str, default=None, help="PassPhrase for private key (default: %(default)s).")
     # Catégorie "action"
     action_group = parser.add_mutually_exclusive_group(required=False)
     # Ajout des arguments pour les fonctionnalités "pub-only"
@@ -207,7 +221,7 @@ def __main__():
         pub_only=True
 
     # Création de l'objet crypto
-    crypto_instance = crypto(dirname=args.dirname, fn_pub=args.pubfile, fn_key=args.keyfile, pub_only=pub_only, size=args.size)
+    crypto_instance = crypto(dirname=args.dirname, fn_pub=args.pubfile, fn_key=args.keyfile, pub_only=pub_only, size=args.size, passphrase=args.passphrase)
 
     if args.send_msg:
         recipient_pubkey, message = args.send_msg
